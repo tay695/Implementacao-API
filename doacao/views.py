@@ -5,6 +5,7 @@ from rest_framework import viewsets  # ← faltava
 
 from doacao.forms import DoacaoForm
 from doacao.models import Doacao
+from doacao.serializers import DoacaoSerializer
 from doador.models import Doador
 from .permissions import IsAdminOrOwner
 
@@ -127,7 +128,8 @@ def deletar_doacao(request, id):
 
 class DoacaoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminOrOwner]
-
+    queryset = Doacao.objects.all()
+    serializer_class = DoacaoSerializer
     def get_queryset(self):
         user = self.request.user
         if user.is_staff:

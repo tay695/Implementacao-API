@@ -19,15 +19,17 @@ router.register(r'entidades', EntidadeBeneficiadaViewSet,  basename='entidadeBen
 router.register(r'pontos-coleta', PontoColetaViewSet,  basename='pontoColeta')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls), 
+    path('', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
     path('sair/', auth_views.LogoutView.as_view(), name='logout'),
     path('', Index, name='index'),
 
     # API
     path('api/', include(router.urls)),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),      # ← login JWT
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),     # ← refresh
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),      
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  
+
 
     # Templates HTML
     path('ponto/', include('ponto_coleta.urls')),
