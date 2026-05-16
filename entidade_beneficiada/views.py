@@ -5,7 +5,9 @@ from django.contrib.auth.decorators import login_required
 from .forms import EntidadeBeneficiadaForm
 from .models import EntidadeBeneficiada
 from django.contrib.auth.decorators import permission_required
-
+from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from .serializers import EntidadeBeneficiadaSerializer
 
 def is_assistente_social(user):
     return user.is_superuser
@@ -72,3 +74,14 @@ def entidade_detail(request, pk):
     return render(request, 'entidade_beneficiada/entidade_detail.html', {
         'entidade': entidade
     })
+
+
+class EntidadeBeneficiadaViewSet(viewsets.ModelViewSet):
+    serializer_class = EntidadeBeneficiadaSerializer
+    queryset = EntidadeBeneficiada.objects.all()
+
+    def get_permissions(self):
+        # qualquer autenticado lê; só admin cria/edita/deleta
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticated()]
+        return [IsAdminUser()]

@@ -1,4 +1,4 @@
-#!/home/jess/Projeto-web---Django/.venv/bin/python3
+#!/home/tainara/Projeto-web---Django/.venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

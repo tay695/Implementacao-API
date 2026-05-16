@@ -5,7 +5,9 @@ from .models import PontoColeta
 from .forms import PontoColetaForm
 from doacao.models import Doacao
 from doador.models import Doador
-
+from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from .serializers import PontoColetaSerializer
 
 def is_assistente_social(user):
     return user.is_superuser
@@ -41,7 +43,7 @@ def ponto_full_list(request):
 
         for ponto in pontos:
             if nome_doador_logado:
-                doacoes_do_usuario = ponto.doacao_set.filter(doador=nome_doador_logado)
+               doacoes_do_usuario = ponto.doacao_set.filter(doador=objeto_doador)
             else:
                 doacoes_do_usuario = Doacao.objects.none()
 
@@ -134,3 +136,13 @@ def confirmar_coleta(request, pk):
     ponto.coletado = True
     ponto.save()
     return redirect('ponto_full_list')
+
+
+class PontoColetaViewSet(viewsets.ModelViewSet):
+    serializer_class = PontoColetaSerializer
+    queryset = PontoColeta.objects.all()
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticated()]
+        return [IsAdminUser()]

@@ -1,6 +1,8 @@
+# doacao/models.py
 from django.db import models
 from estoque.models import Item
 from ponto_coleta.models import PontoColeta
+from doador.models import Doador  # ← adicionar
 
 class Doacao(models.Model):
     CATEGORIAS = [
@@ -23,15 +25,19 @@ class Doacao(models.Model):
         blank=True
     )
 
-    doador = models.CharField(max_length=100, null=True, blank=True)
-    
-    data_doacao = models.DateTimeField(auto_now_add=True)
+    doador = models.ForeignKey(         
+        Doador,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='doacoes'
+    )
 
+    data_doacao = models.DateTimeField(auto_now_add=True)
     coletada = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-
         if self.coletada:
             item, created = Item.objects.get_or_create(
                 nome=self.nome,
