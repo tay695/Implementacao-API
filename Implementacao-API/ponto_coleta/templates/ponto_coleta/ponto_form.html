@@ -1,0 +1,36 @@
+{% extends "_base.html" %}
+
+{% block title %}{{ acao }} Ponto de Coleta{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{{ acao }} Ponto de Coleta</h4>
+                
+                <form class="forms-sample" method="post">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                         {{ field }}
+                           {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        
+                        {% for error in field.errors %}
+                            <label class="text-danger">{{ error }}</label>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary mr-2">Salvar</button>
+                    <a href="{% url 'ponto_full_list' %}" class="btn btn-light">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

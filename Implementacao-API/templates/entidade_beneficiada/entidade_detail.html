@@ -1,0 +1,68 @@
+{% extends "_base.html" %}
+
+{% block title %}Detalhes da Entidade{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Detalhes da Entidade: {{ entidade.nome }}</h4>
+                <p class="card-description">Informações completas sobre a Entidade Beneficiada.</p>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Nome:</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static">{{ entidade.nome }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Responsável:</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static">{{ entidade.responsavel }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Endereço:</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static">{{ entidade.endereco }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Pessoas Atendidas:</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static">{{ entidade.num_membros }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Prioridade:</label>
+                    <div class="col-sm-8">
+                        {% if entidade.prioridade == 'ALTA' %}
+                            <p class="form-control-static"><label class="badge badge-danger">Alta</label></p>
+                        {% elif entidade.prioridade == 'MEDIA' %}
+                            <p class="form-control-static"><label class="badge badge-warning">Média</label></p>
+                        {% else %}
+                            <p class="form-control-static"><label class="badge badge-success">Baixa</label></p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Data de Cadastro:</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static">{{ entidade.data_cadastro|date:"d/m/Y" }}</p>
+                    </div>
+                </div>
+
+                <a href="{% url 'entidade_update' entidade.pk %}" class="btn btn-warning mr-2"><i class="mdi mdi-pencil"></i> Editar</a>
+                <a href="{% url 'entidade_list' %}" class="btn btn-light">Voltar para a Lista</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

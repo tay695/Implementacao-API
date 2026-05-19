@@ -1,0 +1,41 @@
+{% extends '_base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Especificações  {{ item.nome }}</h1>
+
+    <p><strong>Nome:</strong> {{ item.nome }}</p>
+    <p><strong>Quantidade atual:</strong> {{ item.quantidade }}</p>
+
+    <hr>
+
+    <h2>DOAÇÕES RELACIONADAS</h2>
+
+    {% if doacoes %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Quantidade</th>
+                    <th>Data</th>
+                    <th>Categoria</th>
+                    <th>Doador</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in doacoes %}
+                <tr>
+                    <td>{{ d.quantidade }}</td>
+                    <td>{{ d.data_doacao }}</td>
+                    <td>{{ d.get_categoria_display }}</td>
+                    <td>{{ d.doador }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>NÃO HA DOAÇÕES.</p>
+    {% endif %}
+
+    <a href="{% url 'listar_estoque' %}" class="btn btn-secondary mt-3">Voltar</a>
+</div>
+{% endblock %}

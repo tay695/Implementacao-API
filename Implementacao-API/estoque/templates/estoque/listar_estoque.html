@@ -1,0 +1,105 @@
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        margin:0;
+        padding:0;
+        min-height:100vh;
+        font-family:Arial, sans-serif;
+        background-color: #f0f0f0; 
+    }
+
+    .container {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #fff;
+        border-radius: 18px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    
+    .table-responsive .table {
+        background-color: #f7fcf8 ;
+        border: 1px solid #e2f0e4;
+    }
+
+    .table thead {
+        background-color: #0f6e4a ;
+        color: #fff;
+    }
+
+    .table thead th {
+        background-color: #f0f7f0 ;
+        color: #070404;
+    }
+
+    h2, h4 {
+        color: #0c4a31;
+    }
+
+    tbody tr:hover {
+        background-color: #e2f0e4 ;
+    }
+
+    .btn-info { background-color: #3b8e4e; border-color: #3b8e4e; color: #fff; }
+    .btn-info:hover { background-color: #2e6f3d ; border-color: #2e6f3d ; }
+
+    .btn-warning { background-color: #f3a342; border-color: #f3a342; color: #fff; }
+    .btn-warning:hover { background-color: #e0933c ; border-color: #e0933c ; }
+
+    .btn-danger { background-color: #d64949; border-color: #d64949; color: #fff; }
+    .btn-danger:hover { background-color: #c73a3a ; border-color: #c73a3a ; }
+</style>
+
+<div class="container my-5">
+    <title>Estoque</title>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Estoque </h2>
+    </div>
+
+    {% regroup items by get_categoria_display as categorias %}
+
+    {% for categoria in categorias %}
+    <h4 class="mt-5 mb-3">{{ categoria.grouper }}</h4>
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table align-middle text-center mb-0" style="border-radius: 8px; overflow: hidden;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in categoria.list %}
+                <tr class="align-middle" style="transition: 0.3s;">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.nome }}</td>
+                    <td>{{ item.quantidade }}</td>
+                    <td>
+                        <a href="{% url 'detalhar_item' item.id %}" class="btn btn-info btn-sm rounded-pill me-1">
+                            <i class="fa fa-info-circle me-1"></i>Detalhes
+                        </a>
+                        <a href="{% url 'editar_item' item.id %}" class="btn btn-warning btn-sm rounded-pill me-1">
+                            <i class="fa fa-edit me-1"></i>Editar
+                        </a>
+                        <a href="{% url 'deletar_item' item.id %}" class="btn btn-danger btn-sm rounded-pill">
+                            <i class="fa fa-trash me-1"></i>Saída do Estoque
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-muted">Nenhum item nesta categoria.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,229 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}Dashboard de Doações{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h3 class="page-title">Dashboard de Doações</h3>
+</div>
+<!-- estatisticas -->
+<div class="row">
+    <div class="col-md-6 col-lg-3 grid-margin stretch-card">
+        <div class="card card-body bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4>Total de Doações</h4>
+                    <h2>{{ stats.total_doacoes|default:"0" }}</h2>
+                </div>
+                <i class="ti-gift text-white" style="font-size: 40px; opacity: 0.5;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3 grid-margin stretch-card">
+        <div class="card card-body bg-success text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4>Quantidade Total</h4>
+                    <h2>{{ stats.total_quantidade|default:"0" }}</h2>
+                </div>
+                <i class="ti-package text-white" style="font-size: 40px; opacity: 0.5;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3 grid-margin stretch-card">
+        <div class="card card-body bg-warning text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4>Categorias</h4>
+                    <h2>{{ por_categoria|length }}</h2>
+                </div>
+                <i class="ti-layers-alt text-white" style="font-size: 40px; opacity: 0.5;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3 grid-margin stretch-card">
+        <div class="card card-body bg-danger text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4>Top Doadores</h4>
+                    <h2>{{ top_doadores|length }}</h2>
+                </div>
+                <i class="ti-user text-white" style="font-size: 40px; opacity: 0.5;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- grafico por categoria -->
+<div class="row grid-margin">
+    <div class="col-lg-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Doações por Categoria</h4>
+                <canvas id="categoriaChart" height="80"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Resumo por Categoria</h4>
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <tbody>
+                            {% for cat in por_categoria %}
+                            <tr>
+                                <td>
+                                    <span class="label label-info">{{ cat.categoria }}</span>
+                                </td>
+                                <td>{{ cat.count }} doações</td>
+                                <td><strong>{{ cat.total_qtd }}</strong></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">Sem dados</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- top doadores -->
+<div class="row grid-margin">
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Top 5 Doadores</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Doador</th>
+                                <th>Doações</th>
+                                <th>Total (unidades)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doador in top_doadores %}
+                            <tr>
+                                <td>{{ doador.doador|default:"Anônimo" }}</td>
+                                <td>
+                                    <span class="badge badge-primary">{{ doador.count }}</span>
+                                </td>
+                                <td><strong>{{ doador.total_qtd }}</strong></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">Sem dados</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ultimas doacoes -->
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Últimas Doações</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Doador</th>
+                                <th>Quantidade</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doacao in ultimas_doacoes %}
+                            <tr>
+                                <td>{{ doacao.nome }}</td>
+                                <td>{{ doacao.doador }}</td>
+                                <td>
+                                    <span class="badge badge-success">{{ doacao.quantidade }}</span>
+                                </td>
+                                <td>{{ doacao.data_doacao|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Sem dados</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+{{ por_categoria|json_script:"por_categoria_data" }}
+<script>
+  
+    const categoriaData = JSON.parse(document.getElementById('por_categoria_data').textContent);
+    const categoriaLabels = categoriaData.map(item => {
+        const categorias = {
+            'AL': 'Alimentos',
+            'HG': 'Higiene',
+            'LM': 'Limpeza',
+            'VD': 'Vestuário',
+            'OT': 'Outros'
+        };
+        return categorias[item.categoria] || item.categoria;
+    });
+    const categoriaCount = categoriaData.map(item => item.total_qtd);
+
+    const ctx = document.getElementById('categoriaChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: categoriaLabels,
+            datasets: [{
+                label: 'Quantidade Total por Categoria',
+                data: categoriaCount,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(153, 102, 255, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

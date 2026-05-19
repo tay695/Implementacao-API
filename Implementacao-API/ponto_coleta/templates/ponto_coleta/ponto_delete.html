@@ -1,0 +1,30 @@
+{% extends "_base.html" %}
+
+{% block title %}Excluir Ponto{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Confirmar Exclusão</h4>
+                <p class="card-description">
+                    Tem certeza que deseja excluir o ponto de coleta:
+                    <br>
+                    <strong>{{ ponto.nome }}</strong> ({{ ponto.endereco }})?
+                </p>
+                
+                <div class="alert alert-warning" role="alert">
+                    Esta ação é permanente e removerá o ponto de todas as listas de doadores.
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger mr-2">Sim, Excluir</button>
+                    <a href="{% url 'ponto_full_list' %}" class="btn btn-light">Não, Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
