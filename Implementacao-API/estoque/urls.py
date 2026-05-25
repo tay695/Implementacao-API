@@ -2,11 +2,8 @@ from django.urls import path
 
 from . import views
 from rest_framework import routers
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', views.listar_estoque, name='estoque_home'),  
     path('listar/', views.listar_estoque, name='listar_estoque'),
     path('criar/', views.adicionar_estoque, name='adicionar_estoque'),
