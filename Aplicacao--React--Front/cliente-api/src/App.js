@@ -93,7 +93,7 @@ const styles = `
   .content { padding: 32px; flex: 1; }
  
   /* STATS */
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 32px; }
   .stat-card {
     background: #161b22; border: 1px solid #21262d; border-radius: 12px;
     padding: 20px; position: relative; overflow: hidden; transition: border-color 0.2s;
@@ -106,6 +106,7 @@ const styles = `
   .stat-card.teal::before { background: linear-gradient(90deg, #13928e, #2196b0); }
   .stat-card.blue::before { background: linear-gradient(90deg, #2196b0, #5c7cfa); }
   .stat-card.orange::before { background: linear-gradient(90deg, #e8a838, #f85149); }
+  .stat-card.purple::before { background: linear-gradient(90deg, #8b6fc2, #5c7cfa); }
   .stat-icon { font-size: 24px; margin-bottom: 12px; }
   .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: #e6edf3; }
   .stat-label { font-size: 12px; color: #8b949e; margin-top: 4px; }
@@ -394,6 +395,11 @@ export default function App() {
                 <div className="stat-icon">⏳</div>
                 <div className="stat-value">{doacoesPendentes}</div>
                 <div className="stat-label">Pendentes de coleta</div>
+              </div>
+              <div className="stat-card purple">
+                <div className="stat-icon">📍</div>
+                <div className="stat-value">{pontos.length}</div>
+                <div className="stat-label">Pontos de Coleta</div>
               </div>
             </div>
  
