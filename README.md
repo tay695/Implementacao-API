@@ -1,3 +1,5 @@
+SoliBank - Banco de Doações (API RESTful)
+
 SoliBank - Banco de Doações (API RESTful Segura)
 O SoliBank é uma plataforma web desenvolvida para facilitar o gerenciamento de doações, oferecendo um fluxo claro entre doadores, estoque interno e entidades beneficiadas. O sistema organiza todo o processo: desde o envio da doação, passando pela coleta, até sua destinação final para famílias e ONGs.
 
