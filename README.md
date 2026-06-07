@@ -1,138 +1,84 @@
-# SoliBank
-
-<p align="center">
-   <img src="static/img/logo.png" width="400" alt="SoliBank Logo">
-</p>
-
+SoliBank - Banco de Doações (API RESTful Segura)
 O SoliBank é uma plataforma web desenvolvida para facilitar o gerenciamento de doações, oferecendo um fluxo claro entre doadores, estoque interno e entidades beneficiadas. O sistema organiza todo o processo: desde o envio da doação, passando pela coleta, até sua destinação final para famílias e ONGs.
 
----
+🎯 Objetivo do Sistema
+Registrar doações realizadas por usuários doadores.
 
-## 🎯 Objetivo do Sistema
+Controlar entradas e saídas de itens no estoque.
 
-O SoliBank tem como propósito:
+Apoiar o trabalho do Assistente Social na organização e distribuição.
 
-* **Registrar** doações realizadas por usuários doadores.
-* **Controlar** entradas e saídas de itens no estoque.
-* Apoiar o trabalho do **Assistente Social** na organização e distribuição das doações.
-* Manter **histórico e transparência** de todas as movimentações.
+Manter histórico e transparência de todas as movimentações.
 
----
+🧩 Arquitetura Modular (Django Apps)
+O sistema é organizado em módulos especializados:
 
-## 🧩 Arquitetura do Sistema
+doador: Gerencia cadastro, login e o envio de doações via formulário.
 
-O sistema é modularizado em aplicativos (Apps) Django, cada um responsável por um conjunto específico de funcionalidades.
+estoque: Controle central de entradas (doações coletadas) e saídas (destinações).
 
-### 1. doador
+entidade_beneficiada: Gestão de famílias e ONGs que recebem o suporte.
 
-Módulo responsável pela interação do doador com o sistema.
+doacao: App central que vincula doadores, status de coleta e o estoque.
 
-* **Funcionalidades:** Cadastro e login; Envio de doações por formulário; Informar ponto de coleta; Acompanhar o status da doação (coletada ou não); Visualizar histórico e informações permitidas.
+ponto_coleta: Gestão logística de locais físicos para retirada das doações.
 
-### 2. estoque
+👥 Perfis e Segurança
+O sistema utiliza Django OAuth Toolkit (DOT) para uma API RESTful completa e segura.
 
-Módulo central para o controle das doações recebidas.
+Assistente Social (Superusuário): Acesso total para gestão de logística, estoque e administração.
 
-* **Funcionalidades:** Registrar entradas (doações coletadas); Registrar saídas (destinadas às entidades beneficiadas); Listar itens e acompanhar quantidades disponíveis.
-* **Fluxo Básico:** Doação enviada → fica pendente. Assistente Social coleta → gera entrada no estoque.
+Doador (Grupo DOADORES): Permissões limitadas para realizar cadastro, submeter doações e acompanhar o status das contribuições.
 
-### 3. entidade\_beneficiada
+🛠️ Instruções de Execução
+Pré-requisitos
+Python 3.8+, Node.js, npm.
 
-Acesso exclusivo para o Assistente Social.
+Configuração do Backend (API Django)
+Ambiente Virtual: source venv/bin/activate
 
-* **Funcionalidades:** Cadastro de famílias e ONGs beneficiadas; Atualização, consulta e remoção de registros; Visualização do histórico de itens recebidos.
+Instalação e Migrações:
 
-### 4. doacao
+Bash
+pip install -r requirements.txt
+python manage.py migrate
+3. **Dados Iniciais:** `python manage.py loaddata inicial_groups.json`
+4. **Superusuário:** `python manage.py createsuperuser`
+5. **OAuth2 (No Admin):** Configure a aplicação como *Confidential* e *Resource owner password-based* em `/admin/` para obter suas credenciais.
 
-App auxiliar que organiza e vincula as doações aos demais módulos.
-
-* **Funcionalidades:** Registrar todas as doações enviadas pelos usuários; Controlar status da coleta; Relacionar doações às movimentações do estoque.
-
-### 5. ponto\_de\_coleta
-
-Módulo auxiliar que gerencia os locais físicos definidos para a entrega e coleta de doações.
-
-* **Funcionalidades:** Cadastro e Gestão de locais de coleta (pelo Assistente Social); Permite ao Doador selecionar um ponto de coleta da lista no momento de registrar uma nova doação; Relaciona um ponto específico a cada registro de doação, auxiliando na logística de retirada.
-
----
-
-## 👥 Perfis do Sistema e Permissões
-
-### Assistente Social (Superusuário / Administrador)
-
-Este perfil possui todas as permissões do sistema (`is_superuser=True`).
-
-* **Responsabilidades Principais:** Gerenciar entidades beneficiadas; Controlar entradas e saídas do estoque; Atualizar o status das doações (coletada/não coletada); Administrar a logística interna do sistema.
-* **Permissões de Grupo (Exemplo do Django Admin):** `Can add/change/delete/view` em todos os modelos de `entrada de log`, `grupo`, `permissão`, `usuário`, além de todas as permissões de gestão de dados.
-
-### Doador (Usuário Comum / Grupo DOADORES)
-
-Este perfil possui um conjunto limitado de permissões para interagir com o sistema.
-
-* **Responsabilidades Principais:** Realizar cadastro e login; Envia doações via formulário, informando o ponto de coleta; Acompanha o status da própria doação.
-* **Permissões de Grupo (Específicas do Sistema):**
-    * **Doações:** `Can add doacao`, `Can change doacao`, `Can delete doacao`, `Can view doacao`
-    * **Doador:** `Can change doador`
-    * **Ponto de Coleta:** `Can view ponto coleta`
+### Configuração do Frontend (Cliente React)
+1. **Instalação:** `cd CLIENTE/cliente-api && npm install`
+2. **Execução:** `npm start`
 
 ---
 
-## 🔄 Fluxo do Sistema
+## 📚 Documentação Oficial e Referências
 
-1.  O **Doador** envia a doação pelo formulário e **seleciona um Ponto de Coleta** disponível.
-2.  A doação fica registrada como **pendente** e vinculada ao ponto de coleta escolhido.
-3.  O **Assistente Social** verifica as doações pendentes e atualiza o status para *coletada*.
-4.  Se coletada, gera uma **entrada no estoque**.
-5.  O Assistente Social destina os itens a famílias ou ONGs, registrando uma **saída**.
-6.  Todo o processo fica registrado no histórico do sistema.
+Para aprofundar seus conhecimentos e validar a estrutura técnica desta implementação, consulte as fontes oficiais:
 
----
-
-## 🛠️ Instruções de Execução
-
-**Atenção:** Para garantir que as permissões do Grupo **DOADORES** sejam aplicadas corretamente, o comando `loaddata` é obrigatório. Certifique-se de que o arquivo de dados (`inicial_groups.json`) foi exportado via `dumpdata` e está presente na pasta `fixtures` do projeto.
-
-### Pré-requisitos
-
-* Python 3.8+
-* Django 4.x
-* Git (opcional)
-
-### Passos para execução
-
-1.  Clonar o repositório
-2.  Aplicar as migrações do Django:
-    ```bash
-    python manage.py migrate
-    ```
-3.  **Carregar permissões iniciais e Grupos (DOADORES):**
-    ```bash
-    python manage.py loaddata inicial_groups.json
-    ```
-4.  Criar um superusuário (Assistente Social):
-    ```bash
-    python manage.py createsuperuser
-    ```
-5.  Executar o servidor:
-    ```bash
-    python manage.py runserver
-    ```
-6.  Acessar no navegador:
-    ```
-    [http://127.0.0.1:8000](http://127.0.0.1:8000)
-    ```
-
-Para mais detalhes sobre comandos, configurações e boas práticas, consulte a documentação oficial do Django: [🔗 https://www.djangoproject.com/](https://www.djangoproject.com/)
+*   **Django Rest Framework (DRF):** A base da nossa API RESTful. [https://www.django-rest-framework.org/](https://www.django-rest-framework.org/)
+*   **Django OAuth Toolkit (DOT):** Implementação segura do padrão OAuth2 para Django. [https://django-oauth-toolkit.readthedocs.io/](https://django-oauth-toolkit.readthedocs.io/)
+*   **React:** Biblioteca de interface utilizada para o consumo da API. [https://react.dev/](https://react.dev/)
+*   **Django (Framework Base):** Documentação geral do framework. [https://www.djangoproject.com/](https://www.djangoproject.com/)
 
 ---
+🛡️ Autenticação e Segurança (Django OAuth Toolkit)
+O projeto utiliza o Django OAuth Toolkit (DOT) para garantir a segurança da API seguindo o padrão OAuth 2.0. O sistema atua como um Authorization Server, onde o Django gerencia a emissão de tokens, enquanto o cliente React atua como um consumidor seguro.
 
-## 💻 Desenvolvedoras Full Stack
+Fluxo de Autenticação: Utilizamos o Resource Owner Password-based Grant, onde o cliente envia as credenciais do usuário junto ao client_id e client_secret para obter um access_token.
 
+Segurança via Middleware: O OAuth2TokenMiddleware intercepta as requisições e valida a autenticidade do token Bearer antes mesmo do processamento da requisição.
+
+Integração com DRF: A autenticação é delegada ao OAuth2Authentication, garantindo que todas as rotas protegidas exijam um token válido, retornando erro 401 Unauthorized caso o acesso seja indevido.
+
+🎥 Demonstração do Sistema
+Assista ao vídeo abaixo para ver a demonstração das rotas, o fluxo de geração de tokens via DOT e a interação segura entre o cliente React e a API:
+
+👉 [https://youtu.be/zCXA_FCUDGU]
+
+Para mais detalhes sobre as configurações, consulte a Documentação Oficial do Django OAuth Toolkit.
+
+## 💻 Equipe de Desenvolvimento
 * Jéssica Tainá Rodrigues Silva
 * Maria Clara Maciel da Silva
-* Tainara do Amaral Oliveira Azevedo 
-
----
-
-## 🎥 Vídeo de Apresentação do Sistema
-(https://youtu.be/iaybZ06Mk8Y?si=mwBkW_7iS_z8DHZf)
+* Tainara do Amaral Oliveira Azevedo
