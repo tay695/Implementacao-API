@@ -1,5 +1,3 @@
-SoliBank - Banco de Doações (API RESTful)
-
 SoliBank - Banco de Doações (API RESTful Segura)
 O SoliBank é uma plataforma web desenvolvida para facilitar o gerenciamento de doações, oferecendo um fluxo claro entre doadores, estoque interno e entidades beneficiadas. O sistema organiza todo o processo: desde o envio da doação, passando pela coleta, até sua destinação final para famílias e ONGs.
 
@@ -64,7 +62,6 @@ Para aprofundar seus conhecimentos e validar a estrutura técnica desta implemen
 *   **Django (Framework Base):** Documentação geral do framework. [https://www.djangoproject.com/](https://www.djangoproject.com/)
 
 ---
-🛡️ Autenticação e Segurança (Django OAuth Toolkit)
 O projeto utiliza o Django OAuth Toolkit (DOT) para garantir a segurança da API seguindo o padrão OAuth 2.0. O sistema atua como um Authorization Server, onde o Django gerencia a emissão de tokens, enquanto o cliente React atua como um consumidor seguro.
 
 Fluxo de Autenticação: Utilizamos o Resource Owner Password-based Grant, onde o cliente envia as credenciais do usuário junto ao client_id e client_secret para obter um access_token.
